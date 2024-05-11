@@ -9,7 +9,7 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "tauri:dev": "tauri dev",
-    "tauri:build": "tauri build --config tauri.conf.prod.json"
+    "tauri:build": "tauri build --config src-tauri/tauri.conf.prod.json"
   },
   "dependencies": {
     "@emotion/react": "^11.11.3",
