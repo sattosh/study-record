@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export type SubjectReferenceLinkRecord = {
   linkName?: string;
-  linkUrl: string;
+  link: string;
 };
 
 export type SubjectFormProps = {
@@ -14,7 +14,7 @@ export type SubjectFormProps = {
 export const defaultSubjectFormValue: SubjectFormProps = {
   name: '',
   description: '',
-  referenceLinks: [{ linkUrl: '', linkName: '' }],
+  referenceLinks: [{ link: '', linkName: '' }],
 };
 
 export const subjectSchema = z.object({
@@ -23,7 +23,7 @@ export const subjectSchema = z.object({
   referenceLinks: z.array(
     z.object({
       linkName: z.string().min(1),
-      linkUrl: z.string().url(),
+      link: z.string().url(),
     })
   ),
 });

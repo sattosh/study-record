@@ -1,10 +1,10 @@
-import { UseFormReturn, useFieldArray } from 'react-hook-form';
 import { Box, IconButton, Stack, Typography } from '@mui/material';
+import { UseFormReturn, useFieldArray } from 'react-hook-form';
 import { SubjectFormProps } from '../../constants/form';
 // import { SyncOrAsyncFunction } from '../../models';
+import { Add, Delete } from '@mui/icons-material';
 import { InputText } from '../form';
 import { Form } from '../form/form';
-import { Add, Delete } from '@mui/icons-material';
 
 export type SubjectRecordFormProps = {
   /** reactHookFormのインスタンス */
@@ -14,7 +14,12 @@ export type SubjectRecordFormProps = {
 export const SubjectRecordForm = ({ form }: SubjectRecordFormProps): JSX.Element => {
   const { fields, append, remove } = useFieldArray({ name: 'referenceLinks', control: form.control });
   return (
-    <Form form={form}>
+    <Form
+      form={form}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') e.preventDefault();
+      }}
+    >
       <Stack spacing={3}>
         <InputText name="name" placeholder="項目名" formLabel="項目名" sx={{ width: '100%' }} />
         <InputText
@@ -31,7 +36,7 @@ export const SubjectRecordForm = ({ form }: SubjectRecordFormProps): JSX.Element
           {fields.map((field, index) => (
             <Box key={field.id} sx={{ display: 'flex', columnGap: 1, mt: 1 }}>
               <InputText name={`referenceLinks.${index}.linkName`} placeholder="リンク名" sx={{ flexGrow: 1 }} />
-              <InputText name={`referenceLinks.${index}.linkUrl`} placeholder="URL" sx={{ flexGrow: 1 }} />
+              <InputText name={`referenceLinks.${index}.link`} placeholder="URL" sx={{ flexGrow: 1 }} />
               <Box sx={{ pt: 1 }}>
                 <IconButton onClick={() => remove(index)} size="small">
                   <Delete />
@@ -42,7 +47,7 @@ export const SubjectRecordForm = ({ form }: SubjectRecordFormProps): JSX.Element
         </Box>
         {fields.length < 5 && (
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-            <IconButton onClick={() => append({ linkName: '', linkUrl: '' })}>
+            <IconButton onClick={() => append({ linkName: '', link: '' })}>
               <Add />
             </IconButton>
           </Box>

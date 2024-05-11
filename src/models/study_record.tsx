@@ -1,7 +1,7 @@
 import { CamelCaseKeys } from 'camelcase-keys';
 
 /** 学習履歴のレコード定義 */
-export type StudyRecordRawEntity = {
+export type StudyRecordEntity = {
   /** ID */
   id: number;
   /** 科目ID */
@@ -19,4 +19,4 @@ export type StudyRecordRawEntity = {
 };
 
 /** 学習履歴のレコード定義 */
-export type StudyRecordEntity = CamelCaseKeys<StudyRecordRawEntity>;
+export type StudyRecord = CamelCaseKeys<StudyRecordEntity>;

@@ -1,10 +1,10 @@
-import { HomePage, NoMatchPage } from '../pages';
+import { TopPage, NoMatchPage } from '../pages';
 
 export const routes = [
   {
     path: '/',
-    component: HomePage,
-    name: 'Home',
+    component: TopPage,
+    name: 'Top',
   },
   {
     path: '*',

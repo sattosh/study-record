@@ -1,8 +1,7 @@
-import React from 'react';
 import { Dialog, DialogActions, DialogContent, DialogProps, DialogTitle } from '@mui/material';
-import { PropsWithChildren } from 'react';
-import { SyncOrAsyncFunction } from '../../models';
+import React, { PropsWithChildren } from 'react';
 import { LoadingButton } from '.';
+import { SyncOrAsyncFunction } from '../../models';
 
 export type BaseDialogProps = {
   open: boolean;

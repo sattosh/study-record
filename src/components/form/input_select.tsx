@@ -4,7 +4,7 @@ import { Box, Divider, MenuItem, Select, SelectProps } from '@mui/material';
 import { FormControl, FormHelperText, FormLabel, Typography } from '@mui/material';
 import React from 'react';
 
-export type SelectOption = { value: string; label: string };
+export type SelectOption = { value: number; label: string };
 
 export type InputSelectProps = {
   name: string;

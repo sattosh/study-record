@@ -19,6 +19,9 @@
     "window:allow-hide",
     "window:allow-close",
     "window:allow-start-dragging",
-    "sql:allow-load"
+    "sql:allow-load",
+    "sql:allow-select",
+    "sql:allow-close",
+    "sql:allow-execute"
   ]
 }
