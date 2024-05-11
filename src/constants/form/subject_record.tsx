@@ -11,10 +11,10 @@ export type SubjectFormProps = {
   referenceLinks: SubjectReferenceLinkRecord[];
 };
 
-export const defaultSubjectFormProps: SubjectFormProps = {
+export const defaultSubjectFormValue: SubjectFormProps = {
   name: '',
   description: '',
-  referenceLinks: [],
+  referenceLinks: [{ linkUrl: '', linkName: '' }],
 };
 
 export const subjectSchema = z.object({
@@ -22,8 +22,8 @@ export const subjectSchema = z.object({
   description: z.string().optional(),
   referenceLinks: z.array(
     z.object({
-      linkName: z.string().optional(),
-      linkUrl: z.string(),
+      linkName: z.string().min(1),
+      linkUrl: z.string().url(),
     })
   ),
 });

@@ -3,6 +3,7 @@ import { useEffectOnce } from 'react-use';
 import { Route, Routes } from 'react-router-dom';
 import { routes, DatabaseInstance } from '../../constants';
 import { BaseBackDropProgress } from './base_backdrop_progress';
+import { Box } from '@mui/material';
 
 export const PageRouteHandler = () => {
   const [initated, setInitated] = React.useState(false);
@@ -11,6 +12,8 @@ export const PageRouteHandler = () => {
   useEffectOnce(() => {
     const init = async () => {
       try {
+        // 1秒待つ
+        await new Promise((resolve) => setTimeout(resolve, 10000));
         await DatabaseInstance.getInstance();
       } catch (e) {
         setError(`${e}`);
@@ -33,7 +36,15 @@ export const PageRouteHandler = () => {
   return (
     <Routes>
       {routes.map(({ path, component: Component, name }) => (
-        <Route key={name} path={path} element={<Component />} />
+        <Route
+          key={name}
+          path={path}
+          element={
+            <Box sx={{ width: '100vw', height: '100vh', overflow: 'scroll', overscroll: 'auto' }}>
+              <Component />
+            </Box>
+          }
+        />
       ))}
     </Routes>
   );

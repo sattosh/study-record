@@ -1,2 +1,2 @@
 export * from './study_record';
-export * from './subject';
+export * from './subject_record';
