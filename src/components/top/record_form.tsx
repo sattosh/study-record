@@ -1,5 +1,6 @@
 import { Add, Edit } from '@mui/icons-material';
 import { Box, Button, MenuItem, Stack, Typography, useTheme } from '@mui/material';
+import { DateTime } from 'luxon';
 import { UseFormReturn } from 'react-hook-form';
 import { StudyRecordFormProps } from '../../constants/form';
 import { SyncOrAsyncFunction } from '../../models';
@@ -29,13 +30,7 @@ export const RecordForm = ({
 }: RecordFormProps): JSX.Element => {
   const theme = useTheme();
   return (
-    <Form
-      form={form}
-      onSubmit={form.handleSubmit(onRegister)}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter') e.preventDefault();
-      }}
-    >
+    <Form form={form} onSubmit={form.handleSubmit(onRegister)}>
       {loading && <BaseBackDropProgress open inBox />}
       {!loading && (
         <Stack spacing={3}>
@@ -69,8 +64,11 @@ export const RecordForm = ({
             inputProps={{ min: 0 }}
             formLabel="学習時間(分)"
             sx={{ width: '100%' }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') e.preventDefault();
+            }}
           />
-          <InputDate name="studyDate" sx={{ width: '100%' }} formLabel="学習日" />
+          <InputDate name="studyDate" sx={{ width: '100%' }} formLabel="学習日" maxDate={DateTime.now()} />
           <InputText
             name="memo"
             sx={{ width: '100%' }}

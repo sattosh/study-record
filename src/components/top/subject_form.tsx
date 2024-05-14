@@ -14,12 +14,7 @@ export type SubjectRecordFormProps = {
 export const SubjectRecordForm = ({ form }: SubjectRecordFormProps): JSX.Element => {
   const { fields, append, remove } = useFieldArray({ name: 'referenceLinks', control: form.control });
   return (
-    <Form
-      form={form}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter') e.preventDefault();
-      }}
-    >
+    <Form form={form}>
       <Stack spacing={3}>
         <InputText name="name" placeholder="項目名" formLabel="項目名" sx={{ width: '100%' }} />
         <InputText
@@ -35,8 +30,22 @@ export const SubjectRecordForm = ({ form }: SubjectRecordFormProps): JSX.Element
           <Typography variant="h6">参考リンク</Typography>
           {fields.map((field, index) => (
             <Box key={field.id} sx={{ display: 'flex', columnGap: 1, mt: 1 }}>
-              <InputText name={`referenceLinks.${index}.linkName`} placeholder="リンク名" sx={{ flexGrow: 1 }} />
-              <InputText name={`referenceLinks.${index}.link`} placeholder="URL" sx={{ flexGrow: 1 }} />
+              <InputText
+                name={`referenceLinks.${index}.linkName`}
+                placeholder="リンク名"
+                sx={{ flexGrow: 1 }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') e.preventDefault();
+                }}
+              />
+              <InputText
+                name={`referenceLinks.${index}.link`}
+                placeholder="URL"
+                sx={{ flexGrow: 1 }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') e.preventDefault();
+                }}
+              />
               <Box sx={{ pt: 1 }}>
                 <IconButton onClick={() => remove(index)} size="small">
                   <Delete />

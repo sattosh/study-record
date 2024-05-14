@@ -1,12 +1,15 @@
-import { useFormContext, Controller } from 'react-hook-form';
-import { DateTime } from 'luxon';
+import { FormControl, FormHelperText, FormLabel, Typography } from '@mui/material';
 import { DatePicker, DatePickerProps, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
-import { FormControl, FormHelperText, FormLabel, Typography } from '@mui/material';
+import { DateTime } from 'luxon';
+import { Controller, useFormContext } from 'react-hook-form';
 
 export type InputDateProps = {
+  /** formの要素名 */
   name: string;
+  /** 無効化 */
   disabled?: boolean;
+  /** デフォルト値 */
   defaultValue?: DateTime<true>;
   /** フォームにつける命名 */
   formLabel?: string;
