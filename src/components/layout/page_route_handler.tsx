@@ -4,10 +4,12 @@ import { Route, Routes } from 'react-router-dom';
 import { useEffectOnce } from 'react-use';
 import { DatabaseInstance, routes } from '../../constants';
 import { BaseBackDropProgress } from './base_backdrop_progress';
+import { Sidebar } from './sidebar';
 
 export const PageRouteHandler = () => {
   const [initated, setInitated] = React.useState(false);
   const [error, setError] = React.useState('');
+  const [sidebarOpen, setSidebarOpen] = React.useState(false);
 
   useEffectOnce(() => {
     const init = async () => {
@@ -50,18 +52,29 @@ export const PageRouteHandler = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <Routes>
-      {routes.map(({ path, component: Component, name }) => (
-        <Route
-          key={name}
-          path={path}
-          element={
-            <Box sx={{ width: '100vw', height: '100vh', overflow: 'scroll', overscroll: 'auto' }}>
-              <Component />
-            </Box>
-          }
-        />
-      ))}
-    </Routes>
+    <>
+      <Sidebar open={sidebarOpen} drawerHandler={setSidebarOpen} />
+      <Routes>
+        {routes.map(({ path, component: Component, name }) => (
+          <Route
+            key={name}
+            path={path}
+            element={
+              <Box
+                sx={(theme) => ({
+                  width: `calc(100vw -  ${theme.spacing(4.5)} - 1px)`,
+                  marginLeft: `calc(${theme.spacing(4.5)} + 1px)`,
+                  height: '100vh',
+                  overflow: 'scroll',
+                  overscroll: 'auto',
+                })}
+              >
+                <Component />
+              </Box>
+            }
+          />
+        ))}
+      </Routes>
+    </>
   );
 };

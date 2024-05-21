@@ -16,9 +16,12 @@ import {
   studyRecordSchema,
   subjectSchema,
 } from '../constants/form';
+import { useNotice } from '../hooks';
 
 /** 学習ページのトップ */
 export const TopPage = () => {
+  const notice = useNotice();
+
   /** 学習記録のフォーム */
   const recordForm = useForm<StudyRecordFormProps>({
     defaultValues: defaultStudyRecordFormValue,
@@ -50,13 +53,15 @@ export const TopPage = () => {
       try {
         await addStudyRecord({ studyDate: studyDate.toISO(), studyDuration: Number(studyDuration), memo: memo ?? '', subjectId });
         recordForm.reset(defaultStudyRecordFormValue);
+        notice.success('学習記録を追加しました');
         getAllStudyRecordsApi();
-        recordForm.reset(defaultStudyRecordFormValue);
+        recordForm.reset({ ...defaultStudyRecordFormValue, subjectId: null });
       } catch (e) {
+        notice.error('学習記録の追加に失敗しました');
         console.error(e);
       }
     },
-    [getAllStudyRecordsApi, recordForm]
+    [getAllStudyRecordsApi, notice, recordForm]
   );
 
   /** 科目登録処理 */
@@ -76,13 +81,15 @@ export const TopPage = () => {
 
         subjectRegisterDialog.hide();
         subjectForm.reset(defaultSubjectFormValue);
+        notice.success('科目を追加しました');
         recordForm.setValue('subjectId', subjectId);
         getAllSubjectsApi();
       } catch (e) {
+        notice.error('科目の追加に失敗しました');
         console.error(e);
       }
     },
-    [getAllSubjectsApi, getAllSubjectsState.value, recordForm, subjectForm, subjectRegisterDialog]
+    [getAllSubjectsApi, getAllSubjectsState.value, notice, recordForm, subjectForm, subjectRegisterDialog]
   );
 
   return (
