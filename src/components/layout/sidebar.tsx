@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { routes } from '../../constants/route';
+import { RoutePath, routes } from '../../constants/route';
 
 export type SidebarProps = {
   open: boolean;
@@ -69,7 +69,9 @@ export const Sidebar = ({ open, drawerHandler }: SidebarProps) => {
       onMouseOver={() => drawerHandler(true)}
       onMouseOut={() => drawerHandler(false)}
       PaperProps={{
-        elevation: 1,
+        sx: {
+          elevation: 1,
+        },
       }}
     >
       <Box role="presentation" sx={{ display: 'flex', height: '99%', flexDirection: 'column' }} component="div">
@@ -83,8 +85,9 @@ export const Sidebar = ({ open, drawerHandler }: SidebarProps) => {
                 justifyContent: 'start',
                 display: 'flex',
               }}
+              onClick={() => navigate(RoutePath.TOP)}
             >
-              <img src="icon.png" alt="logo" style={{ width: '1.6rem', height: '1.6rem' }} />
+              <img src="icon.png" alt="logo" style={{ width: '1.6rem', height: '1.6rem', cursor: 'pointer' }} />
             </ListItemIcon>
           </ListItem>
         </List>

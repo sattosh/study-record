@@ -4,7 +4,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useAsyncFn, useEffectOnce } from 'react-use';
 import { addStudyRecord, addSubject, getAllStudyRecords, getAllSubjects } from '../api';
-import { useDialog } from '../components/common';
+import { MarkdownViewer, useDialog } from '../components/common';
 import { RecentTotalGraph, RecordForm, Widget } from '../components/top';
 import { RecentSubjectGraph } from '../components/top/recent_subject_graph';
 import { SubjectRecordForm } from '../components/top/subject_form';
@@ -22,12 +22,19 @@ import { useNotice } from '../hooks';
 export const TopPage = () => {
   const notice = useNotice();
 
+  // API
+  const [getAllSubjectsState, getAllSubjectsApi] = useAsyncFn(getAllSubjects);
+  const [getAllStudyRecordsState, getAllStudyRecordsApi] = useAsyncFn(getAllStudyRecords);
+
   /** 学習記録のフォーム */
   const recordForm = useForm<StudyRecordFormProps>({
     defaultValues: defaultStudyRecordFormValue,
     reValidateMode: 'onChange',
     resolver: zodResolver(studyRecordSchema),
   });
+
+  const memoContent = recordForm.watch('memo');
+
   /** 科目登録のフォーム */
   const subjectForm = useForm<SubjectFormProps>({
     defaultValues: defaultSubjectFormValue,
@@ -36,14 +43,6 @@ export const TopPage = () => {
   });
   /** 科目登録ダイアログ */
   const subjectRegisterDialog = useDialog();
-  // API
-  const [getAllSubjectsState, getAllSubjectsApi] = useAsyncFn(getAllSubjects);
-  const [getAllStudyRecordsState, getAllStudyRecordsApi] = useAsyncFn(getAllStudyRecords);
-  // マウント時に実行
-  useEffectOnce(() => {
-    getAllSubjectsApi();
-    getAllStudyRecordsApi();
-  });
 
   /** 学習記録処理 */
   const onRegisterStudyRecord = React.useCallback(
@@ -92,9 +91,28 @@ export const TopPage = () => {
     [getAllSubjectsApi, getAllSubjectsState.value, notice, recordForm, subjectForm, subjectRegisterDialog]
   );
 
+  // マウント時に実行
+  useEffectOnce(() => {
+    getAllSubjectsApi();
+    getAllStudyRecordsApi();
+  });
+
   return (
     <>
-      <Grid container sx={{ height: '100%', width: '100%', justifyContent: 'center', p: 2, m: 0 }} columnSpacing={2}>
+      <Grid
+        container
+        sx={(theme) => ({
+          height: '100%',
+          maxHeight: '100vh',
+          width: `calc( 100vw - ${theme.spacing(6)} )`,
+          justifyContent: 'center',
+          p: 2,
+          m: 0,
+          overflowY: 'hidden',
+          position: 'fixed',
+        })}
+        columnSpacing={2}
+      >
         <Grid item sm={6}>
           <Widget elevation={2} sx={{ height: '100%' }}>
             <RecordForm
@@ -106,25 +124,34 @@ export const TopPage = () => {
             />
           </Widget>
         </Grid>
-        <Grid item sm={6}>
+        <Grid item sm={6} sx={{ height: '100%', maxHeight: '100%' }}>
           <Stack spacing={2} direction="column" sx={{ height: '100%' }}>
-            <Widget elevation={2} sx={{ maxHeight: '50%', display: 'flex', flexFlow: 'column' }}>
-              <RecentTotalGraph
-                xDataKey="studyDate"
-                yDataKey="studyDuration"
-                data={getAllStudyRecordsState.value ?? []}
-                loading={getAllStudyRecordsState.loading}
-              />
-            </Widget>
-            <Widget elevation={2} sx={{ maxHeight: '50%', display: 'flex', flexFlow: 'column' }}>
-              <RecentSubjectGraph
-                xDataKey="subjectName"
-                yDataKey="studyDuration"
-                dateTimeKey="studyDate"
-                data={getAllStudyRecordsState.value ?? []}
-                loading={getAllStudyRecordsState.loading}
-              />
-            </Widget>
+            {!memoContent && (
+              <>
+                <Widget elevation={2} sx={{ maxHeight: '50%', display: 'flex', flexFlow: 'column' }}>
+                  <RecentTotalGraph
+                    xDataKey="studyDate"
+                    yDataKey="studyDuration"
+                    data={getAllStudyRecordsState.value ?? []}
+                    loading={getAllStudyRecordsState.loading}
+                  />
+                </Widget>
+                <Widget elevation={2} sx={{ maxHeight: '50%', display: 'flex', flexFlow: 'column' }}>
+                  <RecentSubjectGraph
+                    xDataKey="subjectName"
+                    yDataKey="studyDuration"
+                    dateTimeKey="studyDate"
+                    data={getAllStudyRecordsState.value ?? []}
+                    loading={getAllStudyRecordsState.loading}
+                  />
+                </Widget>
+              </>
+            )}
+            {memoContent && (
+              <Widget elevation={2} sx={{ height: '100%', maxHeight: '100%', overflowY: 'auto' }}>
+                <MarkdownViewer content={memoContent} />
+              </Widget>
+            )}
           </Stack>
         </Grid>
       </Grid>
